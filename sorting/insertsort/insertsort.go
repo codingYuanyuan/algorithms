@@ -1,4 +1,4 @@
-package selectionsort
+package insertsort
 
 func switchnum(a []int, ind1 int, ind2 int) []int {
 	temp := a[ind1]
@@ -8,17 +8,28 @@ func switchnum(a []int, ind1 int, ind2 int) []int {
 }
 
 func Insertionsort(a []int) []int {
-	ind := 0
+	ind := 1
 
-	for ind <= len(a)-1 {
+	for ind < len(a) {
 		poin := ind
-		for poin <= len(a)-1 {
-			if a[poin] < a[ind] {
-				a = switchnum(a, ind, poin)
+		for poin > 0 {
+			if a[poin] < a[poin-1] {
+				a = exch(a, poin, poin-1)
 			}
-			poin = poin + 1
+			poin -= 1
+			//fmt.Println(ind)
+			//fmt.Println(poin)
+			//fmt.Println(a)
 		}
-		ind = ind + 1
+		ind += 1
 	}
+
+	return a
+}
+
+func exch(a []int, b int, c int) []int {
+	temp := a[b]
+	a[b] = a[c]
+	a[c] = temp
 	return a
 }

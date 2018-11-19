@@ -1,5 +1,104 @@
 package heapsort
 
+import "fmt"
+
+func HeapSort(a []int) []int {
+	start := len(a)/2 - 1
+
+	//build up the heap
+	for start >= 0 {
+		//fmt.Println(a, start)
+		a = maxHeapify(a, len(a), start)
+		start = start - 1
+	}
+	//sorting
+	//fmt.Println("start sorting")
+	ind := len(a) - 1
+	for ind >= 0 {
+		temp := a[0]
+		a[0] = a[ind]
+		a[ind] = temp
+		a = maxHeapify(a, ind, 0)
+		ind = ind - 1
+		//fmt.Println("Next ind")
+	}
+	return a
+}
+
+func maxHeapify(a []int, b int, c int) []int {
+	Left := left(b, c)
+	Right := right(b, c)
+	lar := c
+	if Left != -1 && a[Left] > a[lar] {
+		lar = Left
+	}
+	if Right != -1 && a[Right] > a[lar] {
+		lar = Right
+	}
+	//fmt.Println(a, c, lar, "inner")
+	if lar != c {
+		a = exch(a, lar, c)
+		a = maxHeapify(a, b, lar)
+	}
+
+	return a
+}
+
+func exch(a []int, b int, c int) []int {
+	tem := a[b]
+	a[b] = a[c]
+	a[c] = tem
+	return a
+}
+func left(n int, p int) int {
+	if 2*p+1 >= n {
+		return -1
+	}
+	return 2*p + 1
+}
+
+func right(n int, p int) int {
+	if 2*p+2 >= n {
+		return -1
+	}
+	return 2*p + 2
+}
+
+func DeleteKey(a []int, keyind int) []int {
+	temp := a[0]
+	a[0] = a[len(a)-1]
+	a[len(a)-1] = temp
+	kl := len(a) - 1
+	a = a[:len(a)-1]
+	a = sink(a, kl, 0)
+	return a
+
+}
+
+func AddKey(a []int, key int) []int {
+	a = append(a, key)
+	fmt.Println(a)
+	a = swim(a, len(a)-1)
+	return a
+}
+
+func swim(a []int, k int) []int {
+	for k > 1 && a[k/2] > a[k] {
+		a = exch(a, k/2, k)
+		k = k / 2
+	}
+	return a
+}
+
+func sink(a []int, k int, c int) []int {
+	for 2*c <= k {
+		j := 2 * c
+		fmt.Println(j)
+	}
+	return a
+}
+
+/***
 func Heap(a []int) []int {
 	start := len(a) / 2
 	for start >= 0 {
@@ -106,3 +205,4 @@ func appendslice(a []int, b []int) []int {
 	}
 	return a
 }
+***/

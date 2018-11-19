@@ -99,3 +99,20 @@ func Inorderwalk(r *Root) {
 		Inorderwalk(r.Right)
 	}
 }
+
+func Preorderwalk(r *Root) {
+	if r != nil {
+		fmt.Println(r.Value)
+		Preorderwalk(r.Left)
+		Preorderwalk(r.Right)
+	}
+}
+
+func Postorderwalk(r *Root) {
+	if r != nil {
+
+		Preorderwalk(r.Left)
+		Preorderwalk(r.Right)
+		fmt.Println(r.Value)
+	}
+}

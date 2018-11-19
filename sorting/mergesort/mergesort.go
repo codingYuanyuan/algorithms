@@ -1,45 +1,69 @@
 package mergesort
 
 func Merges(a []int) []int {
-	if len(a) <= 1 {
-		return a
-	}
-
-	l := len(a) / 2
-	b := Merges(a[:l])
-	c := Merges(a[l:])
-
-	d := merge(b, c)
-
-	return d
+	a = sort(a, 0, len(a)-1)
+	return a
 }
 
-func merge(a []int, b []int) []int {
-	c := []int{}
+func sort(a []int, lo int, hi int) []int {
+	if hi <= lo {
+		return a
+	}
+	mid := lo + (hi-lo)/2
+	a = sort(a, lo, mid)
+	a = sort(a, mid+1, hi)
+	a = merge(a, lo, mid, hi)
+	return a
+}
 
-	for len(a) > 0 && len(b) > 0 {
-		if a[0] >= b[0] {
-			c = append(c, b[0])
-			b = b[1:]
+func BUmerge(a []int) []int {
+	sz := 1
+	for sz < len(a) {
+		ind := 0
+		for ind < len(a)-sz {
+			min := ind + 2*sz - 1
+			if min > len(a)-1 {
+				min = len(a) - 1
+			}
+			//fmt.Println(a, ind, ind+sz-1, min)
+			a = merge(a, ind, ind+sz-1, min)
+			ind += 2 * sz
+		}
+		sz = sz * 2
+	}
+	return a
+}
+
+func merge(a []int, lo int, mid int, hi int) []int {
+	N := len(a)
+	var aux []int
+	aux = make([]int, N)
+	t := 0
+	for t < len(a) {
+		aux[t] = a[t]
+		t += 1
+	}
+
+	k := lo
+	i := lo
+	j := mid + 1
+
+	for k <= hi {
+		if i > mid {
+			aux[k] = a[j]
+			j += 1
+		} else if j > hi {
+			aux[k] = a[i]
+			i += 1
+
+		} else if a[i] < a[j] {
+			aux[k] = a[i]
+			i += 1
 		} else {
-			c = append(c, a[0])
-			a = a[1:]
+			aux[k] = a[j]
+			j += 1
 		}
+		k += 1
 	}
-
-	if len(a) != 0 {
-		for len(a) > 0 {
-			c = append(c, a[0])
-			a = a[1:]
-		}
-	}
-
-	if len(b) != 0 {
-		for len(b) > 0 {
-			c = append(c, b[0])
-			b = b[1:]
-		}
-	}
-
-	return c
+	return aux
 }
